@@ -1,14 +1,15 @@
-
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
 #include "stack.h"
 #include "queue.h"
+#include "deque.h"
 
 int main() {
     Stack *s = stack();
     Queue *q = queue();
+    Deque *d = deque();
 
     bool active = true;
     int choice, subChoice, value;
@@ -43,15 +44,12 @@ int main() {
                             if (isStackEmpty(s)) {
                                 printf("Stack is empty.\n");
                             } else {
-                                //printf("Top element: %d\n", peek(s));
+                                printf("Top element: %d\n", peek(s));
                             }
                             break;
                         case 3:
                             printf("Enter value to push: ");
                             scanf("%d", &value);
-                            if (isStackFull(s)) {
-                                printf("Stack is increasing capacity.\n");
-                            }
                             push(s, value);
                             printf("%d pushed to stack.\n", value);
                             break;
@@ -91,9 +89,6 @@ int main() {
                         case 2:
                             printf("Enter value to enqueue: ");
                             scanf("%d", &value);
-                            if (isQueueFull(q)) {
-                                printf("Queue is increasing capacity.\n");
-                            }
                             enqueue(q, value);
                             printf("%d enqueued to queue.\n", value);
                             break;
@@ -107,6 +102,61 @@ int main() {
                             break;
                         case 4:
                             queueActive = false;
+                            break;
+                        default:
+                            printf("Invalid choice. Please try again.\n");
+                    }
+                }
+                break;
+            }
+
+            case 3: { // Deque Operations
+                bool dequeActive = true;
+                while (dequeActive) {
+                    printf("\n=== Deque Menu ===\n");
+                    printf("1. Print Deque\n");
+                    printf("2. Push Front\n");
+                    printf("3. Push Back\n");
+                    printf("4. Pop Front\n");
+                    printf("5. Pop Back\n");
+                    printf("6. Back to Main Menu\n");
+                    printf("Enter your choice: ");
+                    scanf("%d", &subChoice);
+
+                    switch (subChoice) {
+                        case 1:
+                            printDeque(d);
+                            break;
+                        case 2:
+                            printf("Enter value to push front: ");
+                            scanf("%d", &value);
+                            pushFront(d, value);
+                            printf("%d pushed to front of deque.\n", value);
+                            break;
+                        case 3:
+                            printf("Enter value to push back: ");
+                            scanf("%d", &value);
+                            pushBack(d, value);
+                            printf("%d pushed to back of deque.\n", value);
+                            break;
+                        case 4:
+                            value = popFront(d);
+                            if (value == -1) {
+                                printf("Deque is empty. Cannot pop front.\n");
+                            } else {
+                                printf("Popped front value: %d\n", value);
+                            }
+                            break;
+                        case 5:
+                            value = popBack(d);
+                            if (value == -1) {
+                                printf("Deque is empty. Cannot pop back.\n");
+                            } else {
+                                printf("Popped back value: %d\n", value);
+                            }
+                            break;
+                        case 6:
+                            dequeActive = false;
                             break;
                         default:
                             printf("Invalid choice. Please try again.\n");
