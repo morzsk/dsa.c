@@ -21,12 +21,12 @@ void push(Stack *stack, int value) {
 }
 
 int pop(Stack *stack) {
-	if (isStackEmpty(stack)) return stack->arr[stack->top];
+	if (isStackEmpty(stack)) { return -1; }
 	return stack->arr[stack->top--];
 }
 
-void peek(Stack *stack) {
-	printf("%d", stack->top);
+int peek(Stack *stack) {
+	return stack->top;
 }
 
 void printStack(Stack *stack) {

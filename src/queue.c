@@ -24,8 +24,7 @@ void enqueue(Queue *queue, int value) {
 }
 
 int dequeue(Queue *queue) {
-	if (isQueueEmpty(queue)) {return queue->arr[queue->front];}
-    
+	if (isQueueEmpty(queue)) {return -1;}
 	int value = queue->arr[queue->front];
     queue->front++;
 	compactQueue(queue);

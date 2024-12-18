@@ -12,7 +12,7 @@ typedef struct {
 Stack *stack();
 void push(Stack *stack, int value);
 int pop(Stack *stack);
-void peek(Stack *stack);
+int peek(Stack *stack);
 void printStack(Stack *stack);
 bool isStackFull(Stack *stack);
 bool isStackEmpty(Stack *stack);
