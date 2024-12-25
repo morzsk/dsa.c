@@ -5,21 +5,24 @@
 #include "stack.h"
 #include "queue.h"
 #include "deque.h"
+#include "singlyLinkedList.h"
 
 int main() {
     Stack *s = stack();
     Queue *q = queue();
     Deque *d = deque();
+    SinglyLinkedList *sll = singlyLinkedList(); // Create a new singly linked list
 
     bool active = true;
-    int choice, subChoice, value;
+    int choice, subChoice, value, position;
 
     while (active) {
         printf("\n=== Main Menu ===\n");
         printf("1. Stack Operations\n");
         printf("2. Queue Operations\n");
         printf("3. Deque Operations\n");
-        printf("4. Exit\n");
+        printf("4. Singly Linked List Operations\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -164,8 +167,82 @@ int main() {
                 }
                 break;
             }
+            case 4: { // Singly Linked List Operations
+                bool sllActive = true;
+                while (sllActive) {
+                    printf("\n=== Singly Linked List Menu ===\n");
+                    printf("1. Print Singly Linked List\n");
+                    printf("2. Push Head\n");
+                    printf("3. Push Tail\n");
+                    printf("4. Push at Position\n");
+                    printf("5. Pop Head\n");
+                    printf("6. Pop Tail\n");
+                    printf("7. Pop at Position\n");
+                    printf("8. Back to Main Menu\n");
+                    printf("Enter your choice: ");
+                    scanf("%d", &subChoice);
 
-            case 4:
+                    switch (subChoice) {
+                        case 1: // Print List
+                            printSinglyLinkedList(sll);
+                            break;
+                        case 2: // Push Head
+                            printf("Enter value to push at head: ");
+                            scanf("%d", &value);
+                            pushHeadSinglyLinkedList(sll, value);
+                            printf("%d added at the head.\n", value);
+                            break;
+                        case 3: // Push Tail
+                            printf("Enter value to push at tail: ");
+                            scanf("%d", &value);
+                            pushTailSinglyLinkedList(sll, value);
+                            printf("%d added at the tail.\n", value);
+                            break;
+                        case 4: // Push at Position
+                            printf("Enter position to insert at: ");
+                            scanf("%d", &position);
+                            printf("Enter value to insert: ");
+                            scanf("%d", &value);
+                            pushPositionSinglyLinkedList(sll, position, value);
+                            printf("%d added at position %d.\n", value, position);
+                            break;
+                        case 5: // Pop Head
+                            if (sll->head == NULL) {
+                                printf("List is empty. Cannot pop.\n");
+                            } else {
+                                value = popHeadSinglyLinkedList(sll);
+                                printf("Popped value from head: %d\n", value);
+                            }
+                            break;
+                        case 6: // Pop Tail
+                            if (sll->head == NULL) {
+                                printf("List is empty. Cannot pop.\n");
+                            } else {
+                                value = popTailSinglyLinkedList(sll);
+                                printf("Popped value from tail: %d\n", value);
+                            }
+                            break;
+                        case 7: // Pop at Position
+                            if (sll->head == NULL) {
+                                printf("List is empty. Cannot pop.\n");
+                            } else {
+                                printf("Enter position to pop from: ");
+                                scanf("%d", &position);
+                                value = popPositionSinglyLinkedList(sll, position);
+                                printf("Popped value from position %d: %d\n", position, value);
+                            }
+                            break;
+                        case 8: // Back to Main Menu
+                            sllActive = false;
+                            break;
+                        default:
+                            printf("Invalid choice. Please try again.\n");
+                    }
+                }
+                break;
+            }
+
+            case 5: // Exit Program
                 active = false;
                 printf("Exiting program.\n");
                 break;
