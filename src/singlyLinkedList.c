@@ -56,10 +56,7 @@ void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int positi
 		current = current->next;
 	}
 
-	if (current == NULL) {
-		printf("Error out of bounds");
-		return;
-	}
+	if (current == NULL) return;
 
 	Node *n = node(value, current->next);
 	current->next = n;
@@ -106,54 +103,23 @@ int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 }
 
 int popPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position) {
-	return -1;
-}
+	if (singlyLinkedList->head == NULL) return -1;
 
-/*void appendSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int value) { */
-/*	if (singlyLinkedList->head == NULL) {*/
-/*		addHeadSinglyLinkedList(singlyLinkedList, value);*/
-/*		return;*/
-/*	}*/
-/**/
-/*	Node *current = singlyLinkedList->head;*/
-/*	while (current->next != NULL) {*/
-/*		current = (Node *) current->next;*/
-/*	}*/
-/**/
-/*	Node *node = (Node *) malloc(sizeof(Node));*/
-/*	node->next =  NULL;*/
-/*	node->value = value;*/
-/*	current->next = (struct Node *) node;*/
-/*}*/
-/**/
-/*void addHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int value) {*/
-/*	Node *node = (Node *) malloc(sizeof(Node));*/
-/*	node->value = value;*/
-/*	node->next = NULL;*/
-/*	singlyLinkedList->head = node;*/
-/*}*/
-/**/
-/*int popSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {*/
-/*	if (singlyLinkedList->head == NULL) return -1;*/
-/**/
-/*	if (singlyLinkedList->head->next == NULL) {*/
-/*		int value = singlyLinkedList->head->value;*/
-/*	    free(singlyLinkedList->head);*/
-/*		singlyLinkedList->head = NULL;*/
-/*		return value;	*/
-/*	}*/
-/**/
-/*	Node *current = singlyLinkedList->head;*/
-/*	while (current->next->next != NULL) {*/
-/*		current = (Node *) current->next;*/
-/*	}*/
-/**/
-/*    int value = current->next->value;*/
-/*    free(current->next);*/
-/*    current->next = NULL;*/
-/**/
-/*    return value;*/
-/*}*/
+	Node *current = singlyLinkedList->head;
+	for (int i = 0; i >= position - 1; i++) {
+		current = current->next;
+	}
+
+	if (current->next->next == NULL) return -1;
+
+	
+	int value = current->next->value;
+	current->next = current->next->next;
+	// todo: free popped val
+	//free(current->next);
+	
+	return value;
+}
 
 void printSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 	if (singlyLinkedList->head == NULL) {
