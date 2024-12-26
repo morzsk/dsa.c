@@ -40,7 +40,7 @@ Implementation for graph-related algorithms is yet to be added.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/dsa.c.git
+   git clone https://github.com/morzsk/dsa.c.git
    ```
 2. Compile the source code using gnumake compiler:
    ```bash
