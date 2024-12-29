@@ -18,6 +18,8 @@ void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int positi
 int popHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
 int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
 int popPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position);
+int peakHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
+int peakTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
 void printSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
 
 #endif // SINGLY_LINKED_LIST_H

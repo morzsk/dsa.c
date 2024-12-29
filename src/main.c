@@ -178,7 +178,9 @@ int main() {
                     printf("5. Pop Head\n");
                     printf("6. Pop Tail\n");
                     printf("7. Pop at Position\n");
-                    printf("8. Back to Main Menu\n");
+					printf("8. Peak Head\n");
+					printf("9. Peak Tail\n");
+                    printf("10. Back to Main Menu\n");
                     printf("Enter your choice: ");
                     scanf("%d", &subChoice);
 
@@ -232,7 +234,23 @@ int main() {
                                 printf("Popped value from position %d: %d\n", position, value);
                             }
                             break;
-                        case 8: // Back to Main Menu
+						case 8:
+							if (sll->head == NULL) {
+								printf("List is empty. Cannot peak.\n");
+							} else {
+								value = peakHeadSinglyLinkedList(sll);
+								printf("Peaked value from head: %d\n", value);
+							}
+							break;
+						case 9:
+							if (sll->tail == NULL) {
+								printf("Tail does not exist. Cannot peak.\n");
+							} else {
+								value = peakTailSinglyLinkedList(sll);
+								printf("Peaked value from tail: %d\n", value);
+							}
+							break;
+                        case 10: // Back to Main Menu
                             sllActive = false;
                             break;
                         default:

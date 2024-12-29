@@ -13,12 +13,12 @@ typedef struct {
 } DoublyLinkedList;
 
 DoublyLinkedList *doublyLinkedList();
-void addHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
-void appendDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
-void appendDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
-void addHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
-void appendDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
-int popDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
+void pushHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
+void pushTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value);
+void pushPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position, int value);
+int popHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
+int popTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
+int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position);
 void printDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 
 #endif // DOUBLY_LINKED_LIST_H

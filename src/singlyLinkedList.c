@@ -21,6 +21,7 @@ void pushHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int value) {
 	if (singlyLinkedList->head == NULL) {
 		Node *n = node(value, NULL);
 		singlyLinkedList->head = n;
+		singlyLinkedList->tail = n;
 		return;
 	}
 
@@ -32,34 +33,52 @@ void pushTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int value) {
 	if (singlyLinkedList->head == NULL) {
 		Node *n = node(value, NULL);
 		singlyLinkedList->head = n;
+		singlyLinkedList->tail = n;
 		return;
 	}
 
-	Node *current = singlyLinkedList->head;
-	while (current->next != NULL) {
-		current = current->next;
-	}
-
 	Node *n = node(value, NULL);
-	current->next = n;
+	singlyLinkedList->tail->next = n; 
+	singlyLinkedList->tail = n;
 }
 
 void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position, int value) {
 	if (singlyLinkedList->head == NULL) {
 		Node *n = node(value, NULL);
 		singlyLinkedList->head = n;
+		singlyLinkedList->tail = n;
+		return;
+	}
+
+	// Prepend if 0
+	if (position == 0) {
+		Node *n = node(value, singlyLinkedList->head);
+		singlyLinkedList->head = n;
 		return;
 	}
 	
 	Node *current = singlyLinkedList->head;
-	for (int i = 0; i >= position; i++) {
+	int index = 0;
+	while (current != NULL && index < position - 1) {
 		current = current->next;
+		index++;
 	}
 
-	if (current == NULL) return;
+	// Append if beyond
+	if (current->next == NULL) {
+		Node *n = node(value, NULL);
+		current->next = n;
+		singlyLinkedList->tail = n;
+		return;
+	}
 
 	Node *n = node(value, current->next);
 	current->next = n;
+
+	// New node becomes tail
+    if (n->next == NULL) {
+        singlyLinkedList->tail = n;
+    }
 }
 
 int popHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
@@ -69,6 +88,7 @@ int popHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 		int value = singlyLinkedList->head->value;
 		free(singlyLinkedList->head);
 		singlyLinkedList->head = NULL;
+		singlyLinkedList->tail = NULL;
 		return value;
 	}
 	
@@ -87,6 +107,7 @@ int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 		int value = singlyLinkedList->head->value;
 		free(singlyLinkedList->head);
 		singlyLinkedList->head = NULL;
+		singlyLinkedList->tail = NULL;
 		return value;
 	}
 
@@ -96,6 +117,7 @@ int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 	}
 	
 	int value = current->next->value;
+	singlyLinkedList->tail = current;
 	free(current->next);
 	current->next = NULL;
 
@@ -105,11 +127,15 @@ int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 int popPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position) {
 	if (singlyLinkedList->head == NULL) return -1;
 
+	// current = 0 
+	
 	Node *current = singlyLinkedList->head;
 	for (int i = 0; i >= position - 1; i++) {
 		current = current->next;
 	}
 
+	// current->next = NULL
+	
 	if (current->next->next == NULL) return -1;
 
 	
@@ -119,6 +145,14 @@ int popPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position
 	//free(current->next);
 	
 	return value;
+}
+
+int peakHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
+	return singlyLinkedList->head->value;
+}
+
+int peakTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
+	return singlyLinkedList->tail->value;
 }
 
 void printSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
