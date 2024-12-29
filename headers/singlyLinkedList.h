@@ -1,14 +1,14 @@
 #ifndef SINGLY_LINKED_LIST_H
 #define SINGLY_LINKED_LIST_H
 
-typedef struct Node {
+typedef struct NodeSLL {
 	int value;
-	struct Node *next;
-} Node;
+	struct NodeSLL *next;
+} NodeSLL;
 
 typedef struct {
-	Node *head;
-	Node *tail;
+	NodeSLL *head;
+	NodeSLL *tail;
 } SinglyLinkedList;
 
 SinglyLinkedList *singlyLinkedList();

@@ -10,53 +10,53 @@ SinglyLinkedList *singlyLinkedList() {
 	return singlyLinkedList;
 }
 
-Node *node(int value, Node *next) {
-	Node *node = (Node *) malloc(sizeof(Node));
-	node->value = value;
-	node->next = next;
-	return node;
+NodeSLL *nodeSLL(int value, NodeSLL *next) {
+	NodeSLL *nodeSLL = (NodeSLL *) malloc(sizeof(NodeSLL));
+	nodeSLL->value = value;
+	nodeSLL->next = next;
+	return nodeSLL;
 }
 
 void pushHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int value) {
 	if (singlyLinkedList->head == NULL) {
-		Node *n = node(value, NULL);
+		NodeSLL *n = nodeSLL(value, NULL);
 		singlyLinkedList->head = n;
 		singlyLinkedList->tail = n;
 		return;
 	}
 
-	Node *n = node(value, singlyLinkedList->head);
+	NodeSLL *n = nodeSLL(value, singlyLinkedList->head);
 	singlyLinkedList->head = n;
 }
 
 void pushTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int value) {
 	if (singlyLinkedList->head == NULL) {
-		Node *n = node(value, NULL);
+		NodeSLL *n = nodeSLL(value, NULL);
 		singlyLinkedList->head = n;
 		singlyLinkedList->tail = n;
 		return;
 	}
 
-	Node *n = node(value, NULL);
+	NodeSLL *n = nodeSLL(value, NULL);
 	singlyLinkedList->tail->next = n; 
 	singlyLinkedList->tail = n;
 }
 
 void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position, int value) {
 	if (singlyLinkedList->head == NULL) {
-		Node *n = node(value, NULL);
+		NodeSLL *n = nodeSLL(value, NULL);
 		singlyLinkedList->head = n;
 		singlyLinkedList->tail = n;
 		return;
 	}
 
 	if (position == 0) {
-		Node *n = node(value, singlyLinkedList->head);
+		NodeSLL *n = nodeSLL(value, singlyLinkedList->head);
 		singlyLinkedList->head = n;
 		return;
 	}
 	
-	Node *current = singlyLinkedList->head;
+	NodeSLL *current = singlyLinkedList->head;
 	int index = 0;
 	while (current != NULL && index < position - 1) {
 		current = current->next;
@@ -64,16 +64,16 @@ void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int positi
 	}
 
 	if (current->next == NULL) {
-		Node *n = node(value, NULL);
+		NodeSLL *n = nodeSLL(value, NULL);
 		current->next = n;
 		singlyLinkedList->tail = n;
 		return;
 	}
 
-	Node *n = node(value, current->next);
+	NodeSLL *n = nodeSLL(value, current->next);
 	current->next = n;
 
-	// New node becomes tail
+	// New nodeSLL becomes tail
     if (n->next == NULL) {
         singlyLinkedList->tail = n;
     }
@@ -90,7 +90,7 @@ int popHeadSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 		return value;
 	}
 	
-	Node *current = singlyLinkedList->head;
+	NodeSLL *current = singlyLinkedList->head;
 	int value = current->value;
 	singlyLinkedList->head = current->next;
 	free(current);
@@ -109,7 +109,7 @@ int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 		return value;
 	}
 
-	Node *current = singlyLinkedList->head;
+	NodeSLL *current = singlyLinkedList->head;
 	while (current->next->next != NULL) {
 		current = current->next;	
 	}
@@ -126,14 +126,14 @@ int popPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position
 	if (singlyLinkedList->head == NULL) return -1;
 
 	if (position == 0) {	
-		Node *n = singlyLinkedList->head;
+		NodeSLL *n = singlyLinkedList->head;
 		int value = n->value;
 		singlyLinkedList->head = n->next;
 		free(n);
 		return value;
 	}
 	
-	Node *current = singlyLinkedList->head;
+	NodeSLL *current = singlyLinkedList->head;
 	int index = 0;
 	while (current != NULL && index < position - 1) {
 		current = current->next;
@@ -169,10 +169,10 @@ void printSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 		return;
 	}
 	printf("{ ");
-	Node *current = singlyLinkedList->head;
+	NodeSLL *current = singlyLinkedList->head;
 	while (current->next != NULL) {
 		printf("%d, ", current->value);
-		current = (Node *) current->next; 
+		current = (NodeSLL *) current->next; 
 	}
 	printf("%d", current->value);
 	printf(" }\n");

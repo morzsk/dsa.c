@@ -10,55 +10,56 @@ DoublyLinkedList *doublyLinkedList() {
 	return doublyLinkedList;
 }
 
-Node *node(int value, Node *prev, Node *next) {
-	Node *node = (Node *) malloc(sizeof(Node));
-	node->value = value;
-	node->prev = prev;
-	node->next = next;
-	return node;
+NodeDLL *nodeDLL(int value, NodeDLL *prev, NodeDLL *next) {
+	NodeDLL *nodeDLL = (NodeDLL *) malloc(sizeof(NodeDLL));
+	nodeDLL->value = value;
+	nodeDLL->prev = prev;
+	nodeDLL->next = next;
+	return nodeDLL;
 }
 
 void pushHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value) {
 	if (doublyLinkedList->head == NULL) {
-		Node *n = node(value, NULL, NULL);
+		NodeDLL *n = nodeDLL(value, NULL, NULL);
 		doublyLinkedList->head = n;
 		doublyLinkedList->tail = n;
 		return;
 	}
 
-	Node *n = node(value, NULL, doublyLinkedList->head);
+	NodeDLL *n = nodeDLL(value, NULL, doublyLinkedList->head);
 	doublyLinkedList->head->prev = n;
 	doublyLinkedList->head = n;
 }
 
 void pushTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int value) {
 	if (doublyLinkedList->head == NULL) {
-		Node *n = node(value, NULL, NULL);
+		NodeDLL *n = nodeDLL(value, NULL, NULL);
 		doublyLinkedList->head = n;
 		doublyLinkedList->tail = n;
 		return;
 	}
 
-	Node *n = node(value, doublyLinkedList->tail, NULL);
+	NodeDLL *n = nodeDLL(value, doublyLinkedList->tail, NULL);
 	doublyLinkedList->tail->next = n;
 	doublyLinkedList->tail = n;
 }
 
 void pushPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position, int value) {
 	if (doublyLinkedList->head == NULL) {
-		Node *n = node(value, NULL, NULL);
+		NodeDLL *n = nodeDLL(value, NULL, NULL);
 		doublyLinkedList->head = n;
 		doublyLinkedList->tail = n;
 		return;
 	}
 
 	if (position == 0) {
-		Node *n = node(value, NULL, doublyLinkedList->head);
+		NodeDLL *n = nodeDLL(value, NULL, doublyLinkedList->head);
 		doublyLinkedList->head->prev = n;
 		doublyLinkedList->head = n;
+		return;
 	}
 
-	Node *current = doublyLinkedList->head;
+	NodeDLL *current = doublyLinkedList->head;
 	int index = 0;
 	while (current != NULL && index < position - 1) {
 		current = current->next;
@@ -66,12 +67,13 @@ void pushPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int positi
 	}
 
 	if (current->next == NULL) {
-		Node *n = node(value, current, NULL);
+		NodeDLL *n = nodeDLL(value, current, NULL);
 		doublyLinkedList->tail->next = n;
 		doublyLinkedList->tail = n;
+		return;
 	}
 
-	Node *n = node(value, current, current->next);
+	NodeDLL *n = nodeDLL(value, current, current->next);
 	current->next->prev = n;
 	current->next = n;
 
@@ -91,7 +93,7 @@ int popHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList) {
 		return value;
 	}
 
-	Node *n = doublyLinkedList->head;
+	NodeDLL *n = doublyLinkedList->head;
 	int value = n->value;
 	doublyLinkedList->head = n->next;
 	free(n);
@@ -110,7 +112,7 @@ int popTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList) {
 		return value;
 	}
 
-	Node *n = doublyLinkedList->tail;
+	NodeDLL *n = doublyLinkedList->tail;
 	int value = n->value;
 	doublyLinkedList->tail = n->prev;
 	free(n);
@@ -123,14 +125,14 @@ int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position
 	if (doublyLinkedList->head == NULL) return -1;
 
 	if (position == 0) {
-		Node *n = doublyLinkedList->head;
+		NodeDLL *n = doublyLinkedList->head;
 		int value = n->value;
 		doublyLinkedList->head = n->next;
 		free(n);
 		return value;
 	}
 
-	Node *current = doublyLinkedList->head;
+	NodeDLL *current = doublyLinkedList->head;
 	int index = 0;
 	while (current != NULL && index < position) {
 		current = current->next;
@@ -152,7 +154,7 @@ int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position
 	return value;
 }
 
-int peakHeadDoublyLinkList(DoublyLinkedList *doublyLinkedList) {
+int peakHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList) {
 	return doublyLinkedList->head->value;
 }
 
@@ -166,10 +168,10 @@ void printDoublyLinkedList(DoublyLinkedList *doublyLinkedList) {
 		return;
 	}
 	printf("{ ");
-	Node *current = doublyLinkedList->head;
+	NodeDLL *current = doublyLinkedList->head;
 	while (current->next != NULL) {
 		printf("%d, ", current->value);
-		current = (Node *) current->next; 
+		current = (NodeDLL *) current->next; 
 	}
 	printf("%d", current->value);
 	printf(" }\n");

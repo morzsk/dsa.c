@@ -1,15 +1,15 @@
 #ifndef DOUBLY_LINKED_LIST_H
 #define DOUBLY_LINKED_LIST_H
 
-typedef struct Node {
+typedef struct NodeDLL {
 	int value;
-	struct Node *next;
-	struct Node *prev;
-} Node;
+	struct NodeDLL *next;
+	struct NodeDLL *prev;
+} NodeDLL;
 
 typedef struct {
-	Node *head;
-	Node *tail;
+	NodeDLL *head;
+	NodeDLL *tail;
 } DoublyLinkedList;
 
 DoublyLinkedList *doublyLinkedList();
@@ -19,7 +19,7 @@ void pushPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int positi
 int popHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 int popTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position);
-int peakHeadDoublyLinkList(DoublyLinkedList *doublyLinkedList);
+int peakHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 int peakTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 void printDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 
