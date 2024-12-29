@@ -121,7 +121,7 @@ int popTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList) {
 	return value;
 }
 
-int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position) {
+int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position) { 
 	if (doublyLinkedList->head == NULL) return -1;
 
 	if (position == 0) {
@@ -140,9 +140,10 @@ int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position
 	}
 
 	if (current->next == NULL) {
-		int value = current->next->value;
-		doublyLinkedList->tail = current;
-		free(current->next);
+		int value = current->value;
+		doublyLinkedList->tail = current->prev;
+		free(current);
+		doublyLinkedList->tail->next = NULL;
 		return value;
 	}
 
