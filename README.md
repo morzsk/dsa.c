@@ -20,7 +20,7 @@ This repository contains my implementations of various data structures and algor
 
 ## Linked List
 - [x] **Singly Linked List**: A linked list where each node points to the next node, and the last node points to `NULL`.
-- [ ] **Doubly Linked List**: A linked list where each node contains pointers to both the previous and next nodes.
+- [x] **Doubly Linked List**: A linked list where each node contains pointers to both the previous and next nodes.
 - [ ] **Circular Linked List**: A linked list where the last node points back to the head node, forming a circle.
 
 ## Tree
