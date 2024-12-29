@@ -19,6 +19,8 @@ void pushPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int positi
 int popHeadDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 int popTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 int popPositionDoublyLinkedList(DoublyLinkedList *doublyLinkedList, int position);
+int peakHeadDoublyLinkList(DoublyLinkedList *doublyLinkedList);
+int peakTailDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 void printDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
 
 #endif // DOUBLY_LINKED_LIST_H

@@ -6,12 +6,14 @@
 #include "queue.h"
 #include "deque.h"
 #include "singlyLinkedList.h"
+#include "doublyLinkedList.h"
 
 int main() {
     Stack *s = stack();
     Queue *q = queue();
     Deque *d = deque();
-    SinglyLinkedList *sll = singlyLinkedList(); // Create a new singly linked list
+    SinglyLinkedList *sll = singlyLinkedList();
+	DoublyLinkedList *dll = doublyLinkedList();
 
     bool active = true;
     int choice, subChoice, value, position;
@@ -22,7 +24,8 @@ int main() {
         printf("2. Queue Operations\n");
         printf("3. Deque Operations\n");
         printf("4. Singly Linked List Operations\n");
-        printf("5. Exit\n");
+		printf("5. Doubly Linked List Operations\n");
+        printf("6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -259,8 +262,100 @@ int main() {
                 }
                 break;
             }
+			case 5: { // Doubly Linked List Operations
+                bool dllActive = true;
+                while (dllActive) {
+                    printf("\n=== Doubly Linked List Menu ===\n");
+                    printf("1. Print Doubly Linked List\n");
+                    printf("2. Push Head\n");
+                    printf("3. Push Tail\n");
+                    printf("4. Push at Position\n");
+                    printf("5. Pop Head\n");
+                    printf("6. Pop Tail\n");
+                    printf("7. Pop at Position\n");
+                    printf("8. Peek Head\n");
+                    printf("9. Peek Tail\n");
+                    printf("10. Back to Main Menu\n");
+                    printf("Enter your choice: ");
+                    scanf("%d", &subChoice);
 
-            case 5: // Exit Program
+                    switch (subChoice) {
+                        case 1: // Print List
+                            printDoublyLinkedList(dll);
+                            break;
+                        case 2: // Push Head
+                            printf("Enter value to push at head: ");
+                            scanf("%d", &value);
+                            pushHeadDoublyLinkedList(dll, value);
+                            printf("%d added at the head.\n", value);
+                            break;
+                        case 3: // Push Tail
+                            printf("Enter value to push at tail: ");
+                            scanf("%d", &value);
+                            pushTailDoublyLinkedList(dll, value);
+                            printf("%d added at the tail.\n", value);
+                            break;
+                        case 4: // Push at Position
+                            printf("Enter position to insert at: ");
+                            scanf("%d", &position);
+                            printf("Enter value to insert: ");
+                            scanf("%d", &value);
+                            pushPositionDoublyLinkedList(dll, position, value);
+                            printf("%d added at position %d.\n", value, position);
+                            break;
+                        case 5: // Pop Head
+                            if (dll->head == NULL) {
+                                printf("List is empty. Cannot pop.\n");
+                            } else {
+                                value = popHeadDoublyLinkedList(dll);
+                                printf("Popped value from head: %d\n", value);
+                            }
+                            break;
+                        case 6: // Pop Tail
+                            if (dll->head == NULL) {
+                                printf("List is empty. Cannot pop.\n");
+                            } else {
+                                value = popTailDoublyLinkedList(dll);
+                                printf("Popped value from tail: %d\n", value);
+                            }
+                            break;
+                        case 7: // Pop at Position
+                            if (dll->head == NULL) {
+                                printf("List is empty. Cannot pop.\n");
+                            } else {
+                                printf("Enter position to pop from: ");
+                                scanf("%d", &position);
+                                value = popPositionDoublyLinkedList(dll, position);
+                                printf("Popped value from position %d: %d\n", position, value);
+                            }
+                            break;
+                        case 8: // Peek Head
+                            if (dll->head == NULL) {
+                                printf("List is empty. Cannot peek.\n");
+                            } else {
+                                value = peakHeadDoublyLinkedList(dll);
+                                printf("Peeked value from head: %d\n", value);
+                            }
+                            break;
+                        case 9: // Peek Tail
+                            if (dll->tail == NULL) {
+                                printf("Tail does not exist. Cannot peek.\n");
+                            } else {
+                                value = peakTailDoublyLinkedList(dll);
+                                printf("Peeked value from tail: %d\n", value);
+                            }
+                            break;
+                        case 10: // Back to Main Menu
+                            dllActive = false;
+                            break;
+                        default:
+                            printf("Invalid choice. Please try again.\n");
+                    }
+                }
+                break;
+            }
+
+            case 6: // Exit Program
                 active = false;
                 printf("Exiting program.\n");
                 break;

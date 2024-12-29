@@ -50,7 +50,6 @@ void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int positi
 		return;
 	}
 
-	// Prepend if 0
 	if (position == 0) {
 		Node *n = node(value, singlyLinkedList->head);
 		singlyLinkedList->head = n;
@@ -64,7 +63,6 @@ void pushPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int positi
 		index++;
 	}
 
-	// Append if beyond
 	if (current->next == NULL) {
 		Node *n = node(value, NULL);
 		current->next = n;
@@ -127,17 +125,27 @@ int popTailSinglyLinkedList(SinglyLinkedList *singlyLinkedList) {
 int popPositionSinglyLinkedList(SinglyLinkedList *singlyLinkedList, int position) {
 	if (singlyLinkedList->head == NULL) return -1;
 
-	// current = 0 
+	if (position == 0) {	
+		Node *n = singlyLinkedList->head;
+		int value = n->value;
+		singlyLinkedList->head = n->next;
+		free(n);
+		return value;
+	}
 	
 	Node *current = singlyLinkedList->head;
-	for (int i = 0; i >= position - 1; i++) {
+	int index = 0;
+	while (current != NULL && index < position - 1) {
 		current = current->next;
+		index++;
 	}
 
-	// current->next = NULL
-	
-	if (current->next->next == NULL) return -1;
-
+	if (current->next == NULL) {	
+		int value = current->next->value;
+		singlyLinkedList->tail = current;
+		free(current->next);
+		return value;
+	}
 	
 	int value = current->next->value;
 	current->next = current->next->next;
