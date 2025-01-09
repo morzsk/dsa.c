@@ -26,13 +26,16 @@ void dsa_dynamic_deque_insert_front(dsa_dynamic_deque *dynamic_deque, const int 
 	if (dsa_dynamic_deque_is_full(dynamic_deque)) {
 		dsa_dynamic_array_resize(dynamic_deque->dynamic_array, 2);
 	}
+
 	dsa_dynamic_array_insert(dynamic_deque->dynamic_array, 0, value);
+	dynamic_deque->back++;
 }
 
 int dsa_dynamic_deque_remove_front(dsa_dynamic_deque *dynamic_deque) {
 	if (dsa_dynamic_deque_is_empty(dynamic_deque)) return -1;
 
 	int value = dsa_dynamic_array_remove(dynamic_deque->dynamic_array, 0);
+	dynamic_deque->back--;
 	return value;
 }
 
