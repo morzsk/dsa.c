@@ -2,360 +2,85 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "stack.h"
-#include "queue.h"
-#include "deque.h"
-#include "singlyLinkedList.h"
-#include "doublyLinkedList.h"
+#include "dynamic_array.h"
 
 int main() {
-    Stack *s = stack();
-    Queue *q = queue();
-    Deque *d = deque();
-    SinglyLinkedList *sll = singlyLinkedList();
-	DoublyLinkedList *dll = doublyLinkedList();
+    dsa_dynamic_array *da = dsa_dynamic_array_create(10);
 
     bool active = true;
-    int choice, subChoice, value, position;
+    int choice, index, value;
 
     while (active) {
-        printf("\n=== Main Menu ===\n");
-        printf("1. Stack Operations\n");
-        printf("2. Queue Operations\n");
-        printf("3. Deque Operations\n");
-        printf("4. Singly Linked List Operations\n");
-		printf("5. Doubly Linked List Operations\n");
-        printf("6. Exit\n");
+        printf("\n=== Dynamic Array Menu ===\n");
+        printf("1. Print Dynamic Array\n");
+        printf("2. Insert Value\n");
+        printf("3. Remove Value\n");
+        printf("4. Get Value\n");
+        printf("5. Set Value\n");
+        printf("6. Check if Full\n");
+        printf("7. Check if Empty\n");
+        printf("8. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1: { // Stack Operations
-                bool stackActive = true;
-                while (stackActive) {
-                    printf("\n=== Stack Menu ===\n");
-                    printf("1. Print Stack\n");
-                    printf("2. Peek Stack\n");
-                    printf("3. Push to Stack\n");
-                    printf("4. Pop from Stack\n");
-                    printf("5. Back to Main Menu\n");
-                    printf("Enter your choice: ");
-                    scanf("%d", &subChoice);
+            case 1:
+                dsa_dynamic_array_print(da);
+                break;
 
-                    switch (subChoice) {
-                        case 1:
-                            printStack(s);
-                            break;
-                        case 2:
-                            if (isStackEmpty(s)) {
-                                printf("Stack is empty.\n");
-                            } else {
-                                printf("Top element: %d\n", peek(s));
-                            }
-                            break;
-                        case 3:
-                            printf("Enter value to push: ");
-                            scanf("%d", &value);
-                            push(s, value);
-                            printf("%d pushed to stack.\n", value);
-                            break;
-                        case 4:
-                            if (isStackEmpty(s)) {
-                                printf("Stack is empty. Cannot pop.\n");
-                            } else {
-                                value = pop(s);
-                                printf("Popped value: %d\n", value);
-                            }
-                            break;
-                        case 5:
-                            stackActive = false;
-                            break;
-                        default:
-                            printf("Invalid choice. Please try again.\n");
-                    }
+            case 2:
+                printf("Enter index to insert at: ");
+                scanf("%d", &index);
+                printf("Enter value to insert: ");
+                scanf("%d", &value);
+                dsa_dynamic_array_insert(da, index, value);
+                printf("Value %d inserted at index %d.\n", value, index);
+                break;
+
+            case 3:
+                printf("Enter index to remove from: ");
+                scanf("%d", &index);
+                int removed_value = dsa_dynamic_array_remove(da, index);
+                if (removed_value) {
+                    printf("Removed value: %d\n", removed_value); 
+                } else {
+                    printf("Invalid index or array is empty.\n");
                 }
                 break;
-            }
 
-            case 2: { // Queue Operations
-                bool queueActive = true;
-                while (queueActive) {
-                    printf("\n=== Queue Menu ===\n");
-                    printf("1. Print Queue\n");
-                    printf("2. Enqueue\n");
-                    printf("3. Dequeue\n");
-                    printf("4. Back to Main Menu\n");
-                    printf("Enter your choice: ");
-                    scanf("%d", &subChoice);
+            case 4:
+                printf("Enter index to get value from: ");
+                scanf("%d", &index);
+                value = dsa_dynamic_array_get(da, index);
+                printf("Value at index %d: %d\n", index, value);
+                break;
 
-                    switch (subChoice) {
-                        case 1:
-                            printQueue(q);
-                            break;
-                        case 2:
-                            printf("Enter value to enqueue: ");
-                            scanf("%d", &value);
-                            enqueue(q, value);
-                            printf("%d enqueued to queue.\n", value);
-                            break;
-                        case 3:
-                            if (isQueueEmpty(q)) {
-                                printf("Queue is empty. Cannot dequeue.\n");
-                            } else {
-                                value = dequeue(q);
-                                printf("Dequeued value: %d\n", value);
-                            }
-                            break;
-                        case 4:
-                            queueActive = false;
-                            break;
-                        default:
-                            printf("Invalid choice. Please try again.\n");
-                    }
+            case 5:
+                printf("Enter index to set value at: ");
+                scanf("%d", &index);
+                printf("Enter value to set: ");
+                scanf("%d", &value);
+                dsa_dynamic_array_set(da, index, value);
+                printf("Value at index %d set to %d.\n", index, value);
+                break;
+
+            case 6:
+                if (dsa_dynamic_array_is_full(da)) {
+                    printf("Dynamic array is full.\n");
+                } else {
+                    printf("Dynamic array is not full.\n");
                 }
                 break;
-            }
 
-            case 3: { // Deque Operations
-                bool dequeActive = true;
-                while (dequeActive) {
-                    printf("\n=== Deque Menu ===\n");
-                    printf("1. Print Deque\n");
-                    printf("2. Push Front\n");
-                    printf("3. Push Back\n");
-                    printf("4. Pop Front\n");
-                    printf("5. Pop Back\n");
-                    printf("6. Back to Main Menu\n");
-                    printf("Enter your choice: ");
-                    scanf("%d", &subChoice);
-
-                    switch (subChoice) {
-                        case 1:
-                            printDeque(d);
-                            break;
-                        case 2:
-                            printf("Enter value to push front: ");
-                            scanf("%d", &value);
-                            pushFront(d, value);
-                            printf("%d pushed to front of deque.\n", value);
-                            break;
-                        case 3:
-                            printf("Enter value to push back: ");
-                            scanf("%d", &value);
-                            pushBack(d, value);
-                            printf("%d pushed to back of deque.\n", value);
-                            break;
-                        case 4:
-                            value = popFront(d);
-                            if (value == -1) {
-                                printf("Deque is empty. Cannot pop front.\n");
-                            } else {
-                                printf("Popped front value: %d\n", value);
-                            }
-                            break;
-                        case 5:
-                            value = popBack(d);
-                            if (value == -1) {
-                                printf("Deque is empty. Cannot pop back.\n");
-                            } else {
-                                printf("Popped back value: %d\n", value);
-                            }
-                            break;
-                        case 6:
-                            dequeActive = false;
-                            break;
-                        default:
-                            printf("Invalid choice. Please try again.\n");
-                    }
+            case 7:
+                if (dsa_dynamic_array_is_empty(da)) {
+                    printf("Dynamic array is empty.\n");
+                } else {
+                    printf("Dynamic array is not empty.\n");
                 }
                 break;
-            }
-            case 4: { // Singly Linked List Operations
-                bool sllActive = true;
-                while (sllActive) {
-                    printf("\n=== Singly Linked List Menu ===\n");
-                    printf("1. Print Singly Linked List\n");
-                    printf("2. Push Head\n");
-                    printf("3. Push Tail\n");
-                    printf("4. Push at Position\n");
-                    printf("5. Pop Head\n");
-                    printf("6. Pop Tail\n");
-                    printf("7. Pop at Position\n");
-					printf("8. Peak Head\n");
-					printf("9. Peak Tail\n");
-                    printf("10. Back to Main Menu\n");
-                    printf("Enter your choice: ");
-                    scanf("%d", &subChoice);
 
-                    switch (subChoice) {
-                        case 1: // Print List
-                            printSinglyLinkedList(sll);
-                            break;
-                        case 2: // Push Head
-                            printf("Enter value to push at head: ");
-                            scanf("%d", &value);
-                            pushHeadSinglyLinkedList(sll, value);
-                            printf("%d added at the head.\n", value);
-                            break;
-                        case 3: // Push Tail
-                            printf("Enter value to push at tail: ");
-                            scanf("%d", &value);
-                            pushTailSinglyLinkedList(sll, value);
-                            printf("%d added at the tail.\n", value);
-                            break;
-                        case 4: // Push at Position
-                            printf("Enter position to insert at: ");
-                            scanf("%d", &position);
-                            printf("Enter value to insert: ");
-                            scanf("%d", &value);
-                            pushPositionSinglyLinkedList(sll, position, value);
-                            printf("%d added at position %d.\n", value, position);
-                            break;
-                        case 5: // Pop Head
-                            if (sll->head == NULL) {
-                                printf("List is empty. Cannot pop.\n");
-                            } else {
-                                value = popHeadSinglyLinkedList(sll);
-                                printf("Popped value from head: %d\n", value);
-                            }
-                            break;
-                        case 6: // Pop Tail
-                            if (sll->head == NULL) {
-                                printf("List is empty. Cannot pop.\n");
-                            } else {
-                                value = popTailSinglyLinkedList(sll);
-                                printf("Popped value from tail: %d\n", value);
-                            }
-                            break;
-                        case 7: // Pop at Position
-                            if (sll->head == NULL) {
-                                printf("List is empty. Cannot pop.\n");
-                            } else {
-                                printf("Enter position to pop from: ");
-                                scanf("%d", &position);
-                                value = popPositionSinglyLinkedList(sll, position);
-                                printf("Popped value from position %d: %d\n", position, value);
-                            }
-                            break;
-						case 8:
-							if (sll->head == NULL) {
-								printf("List is empty. Cannot peak.\n");
-							} else {
-								value = peakHeadSinglyLinkedList(sll);
-								printf("Peaked value from head: %d\n", value);
-							}
-							break;
-						case 9:
-							if (sll->tail == NULL) {
-								printf("Tail does not exist. Cannot peak.\n");
-							} else {
-								value = peakTailSinglyLinkedList(sll);
-								printf("Peaked value from tail: %d\n", value);
-							}
-							break;
-                        case 10: // Back to Main Menu
-                            sllActive = false;
-                            break;
-                        default:
-                            printf("Invalid choice. Please try again.\n");
-                    }
-                }
-                break;
-            }
-			case 5: { // Doubly Linked List Operations
-                bool dllActive = true;
-                while (dllActive) {
-                    printf("\n=== Doubly Linked List Menu ===\n");
-                    printf("1. Print Doubly Linked List\n");
-                    printf("2. Push Head\n");
-                    printf("3. Push Tail\n");
-                    printf("4. Push at Position\n");
-                    printf("5. Pop Head\n");
-                    printf("6. Pop Tail\n");
-                    printf("7. Pop at Position\n");
-                    printf("8. Peek Head\n");
-                    printf("9. Peek Tail\n");
-                    printf("10. Back to Main Menu\n");
-                    printf("Enter your choice: ");
-                    scanf("%d", &subChoice);
-
-                    switch (subChoice) {
-                        case 1: // Print List
-                            printDoublyLinkedList(dll);
-                            break;
-                        case 2: // Push Head
-                            printf("Enter value to push at head: ");
-                            scanf("%d", &value);
-                            pushHeadDoublyLinkedList(dll, value);
-                            printf("%d added at the head.\n", value);
-                            break;
-                        case 3: // Push Tail
-                            printf("Enter value to push at tail: ");
-                            scanf("%d", &value);
-                            pushTailDoublyLinkedList(dll, value);
-                            printf("%d added at the tail.\n", value);
-                            break;
-                        case 4: // Push at Position
-                            printf("Enter position to insert at: ");
-                            scanf("%d", &position);
-                            printf("Enter value to insert: ");
-                            scanf("%d", &value);
-                            pushPositionDoublyLinkedList(dll, position, value);
-                            printf("%d added at position %d.\n", value, position);
-                            break;
-                        case 5: // Pop Head
-                            if (dll->head == NULL) {
-                                printf("List is empty. Cannot pop.\n");
-                            } else {
-                                value = popHeadDoublyLinkedList(dll);
-                                printf("Popped value from head: %d\n", value);
-                            }
-                            break;
-                        case 6: // Pop Tail
-                            if (dll->head == NULL) {
-                                printf("List is empty. Cannot pop.\n");
-                            } else {
-                                value = popTailDoublyLinkedList(dll);
-                                printf("Popped value from tail: %d\n", value);
-                            }
-                            break;
-                        case 7: // Pop at Position
-                            if (dll->head == NULL) {
-                                printf("List is empty. Cannot pop.\n");
-                            } else {
-                                printf("Enter position to pop from: ");
-                                scanf("%d", &position);
-                                value = popPositionDoublyLinkedList(dll, position);
-                                printf("Popped value from position %d: %d\n", position, value);
-                            }
-                            break;
-                        case 8: // Peek Head
-                            if (dll->head == NULL) {
-                                printf("List is empty. Cannot peek.\n");
-                            } else {
-                                value = peakHeadDoublyLinkedList(dll);
-                                printf("Peeked value from head: %d\n", value);
-                            }
-                            break;
-                        case 9: // Peek Tail
-                            if (dll->tail == NULL) {
-                                printf("Tail does not exist. Cannot peek.\n");
-                            } else {
-                                value = peakTailDoublyLinkedList(dll);
-                                printf("Peeked value from tail: %d\n", value);
-                            }
-                            break;
-                        case 10: // Back to Main Menu
-                            dllActive = false;
-                            break;
-                        default:
-                            printf("Invalid choice. Please try again.\n");
-                    }
-                }
-                break;
-            }
-
-            case 6: // Exit Program
+            case 8:
                 active = false;
                 printf("Exiting program.\n");
                 break;
@@ -365,5 +90,6 @@ int main() {
         }
     }
 
+    dsa_dynamic_array_destroy(da);
     return EXIT_SUCCESS;
 }
