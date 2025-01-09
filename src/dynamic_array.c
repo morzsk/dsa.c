@@ -36,6 +36,7 @@ void dsa_dynamic_array_insert(dsa_dynamic_array *dynamic_array, int index, const
 
 	dsa_dynamic_array_shift_elements(dynamic_array, index, 1);
 	dynamic_array->array[index] = value;
+	dynamic_array->size++;
 }
 
 int dsa_dynamic_array_remove(dsa_dynamic_array *dynamic_array, int index) {
@@ -45,6 +46,7 @@ int dsa_dynamic_array_remove(dsa_dynamic_array *dynamic_array, int index) {
 
 	int value = dynamic_array->array[index];
 	dsa_dynamic_array_shift_elements(dynamic_array, index, -1);
+	dynamic_array->size--;
 
 	return value;
 };
@@ -79,12 +81,10 @@ void dsa_dynamic_array_shift_elements(dsa_dynamic_array *dynamic_array, int inde
 		for (int i = dynamic_array->size; i >= index; i--) {
 			dynamic_array->array[i + 1] = dynamic_array->array[i];
 		}
-		dynamic_array->size++;
 	} else if (direction < 0) {
 		for (int i = index; i <= dynamic_array->size; i++) {
 			dynamic_array->array[i] = dynamic_array->array[i + 1];
 		}
-		dynamic_array->size--;
 	}
 }
 

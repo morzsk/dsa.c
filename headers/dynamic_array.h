@@ -2,7 +2,6 @@
 #define DSA_DYNAMIC_ARRAY_H
 
 #include <stdbool.h>
-#include <stdlib.h>
 
 typedef struct {
 	int *array;
