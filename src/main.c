@@ -6,10 +6,12 @@
 #include "dynamic_deque.h"
 #include "singly_linked_list.h"
 #include "doubly_linked_list.h"
+#include "hash_table.h"
 
 int main() {
 	dsa_dynamic_array *da = dsa_dynamic_array_create(10);
 	dsa_dynamic_deque *dd = dsa_dynamic_deque_create(10);
+	dsa_hash_table *ht = dsa_hash_table_create(10);
 	dsa_singly_linked_list *sll = dsa_singly_linked_list_create();
 	dsa_doubly_linked_list *dll = dsa_doubly_linked_list_create();
 
@@ -20,9 +22,10 @@ int main() {
 		printf("\n=== Main Menu ===\n");
 		printf("1. Dynamic Array Operations\n");
 		printf("2. Dynamic Deque Operations\n");
-		printf("3. Singly Linked List Operations\n");
-		printf("4. Doubly Linked List Operations\n");
-		printf("5. Exit\n");
+		printf("3. Hash Table Operations\n");
+		printf("4. Singly Linked List Operations\n");
+		printf("5. Doubly Linked List Operations\n");
+		printf("6. Exit\n");
 		printf("Enter your choice: ");
 		scanf("%d", &choice);
 
@@ -194,6 +197,86 @@ int main() {
 			}
 
 			case 3: {
+				bool hashTableActive = true;
+				char key[256], value[256];
+				size_t index;
+
+				while (hashTableActive) {
+					printf("\n=== Hash Table Menu ===\n");
+					printf("1. Print Hash Table\n");
+					printf("2. Insert Key-Value Pair\n");
+					printf("3. Get Value by Key\n");
+					printf("4. Remove Key\n");
+					printf("5. Check if Full\n");
+					printf("6. Check if Empty\n");
+					printf("7. Check Load Factor\n");
+					printf("8. Back to Main Menu\n");
+					printf("Enter your choice: ");
+					scanf("%d", &choice);
+
+					switch (choice) {
+						case 1: 
+							dsa_hash_table_print(ht);
+							break;
+
+						case 2: 
+							printf("Enter key to insert: ");
+							scanf("%s", key);
+							printf("Enter value to insert: ");
+							scanf("%s", value);
+							dsa_hash_table_insert(ht, key, value);
+							printf("Inserted key-value pair: (%s, %s)\n", key, value);
+							break;
+
+						case 3: 
+							printf("Enter key to get value: ");
+							scanf("%s", key);
+							char *retrieved_value = dsa_hash_table_get(ht, key);
+							if (retrieved_value) {
+								printf("Value for key '%s': %s\n", key, retrieved_value);
+							} else {
+								printf("Key '%s' not found in hash table.\n", key);
+							}
+							break;
+
+						case 4: 
+							printf("Enter key to remove: ");
+							scanf("%s", key);
+							dsa_hash_table_remove(ht, key);
+							printf("Key '%s' removed from hash table (if it existed).\n", key);
+							break;
+
+						case 5: 
+							if (dsa_hash_table_is_full(ht)) {
+								printf("Hash table is full.\n");
+							} else {
+								printf("Hash table is not full.\n");
+							}
+							break;
+
+						case 6: 
+							if (dsa_hash_table_is_empty(ht)) {
+								printf("Hash table is empty.\n");
+							} else {
+								printf("Hash table is not empty.\n");
+							}
+							break;
+
+						case 7: 
+							printf("Load Factor: %.2f\n", dsa_hash_table_load_factor(ht));
+							break;
+
+						case 8: 
+							hashTableActive = false;
+							break;
+
+						default: 
+							printf("Invalid choice. Please try again.\n");
+					}
+				}
+				break;
+			}
+			case 4: {
 				bool listActive = true;
 				while (listActive) {
 					printf("\n=== Singly Linked List Menu ===\n");
@@ -276,7 +359,7 @@ int main() {
 				break;
 			}
 
-			case 4: {
+			case 5: {
 				bool dllActive = true;
 				while (dllActive) {
 					printf("\n=== Doubly Linked List Menu ===\n");
@@ -363,7 +446,7 @@ int main() {
 				}
 				break;
 			}
-			case 5:
+			case 6:
 				active = false;
 				printf("Exiting program.\n");
 				break;
