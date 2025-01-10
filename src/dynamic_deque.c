@@ -7,11 +7,14 @@
 
 dsa_dynamic_deque *dsa_dynamic_deque_create(int initial_capacity) {
 	dsa_dynamic_deque *dynamic_deque = (dsa_dynamic_deque *) malloc(sizeof(dsa_dynamic_deque));
+	if (!dynamic_deque) return NULL;
+
 	dsa_dynamic_array *dynamic_array = dsa_dynamic_array_create(initial_capacity);
+	if (!dynamic_array) return NULL;
 
 	dynamic_deque->dynamic_array = dynamic_array;
 	dynamic_deque->front = 0;
-	dynamic_deque->back = 0;
+	dynamic_deque->back = -1;
 
 	return dynamic_deque;
 }
@@ -23,36 +26,22 @@ void dsa_dynamic_deque_destroy(dsa_dynamic_deque *dynamic_deque) {
 }
 
 void dsa_dynamic_deque_insert_front(dsa_dynamic_deque *dynamic_deque, const int value) {
-	if (dsa_dynamic_deque_is_full(dynamic_deque)) {
-		dsa_dynamic_array_resize(dynamic_deque->dynamic_array, 2);
-	}
-
-	dsa_dynamic_array_insert(dynamic_deque->dynamic_array, 0, value);
 	dynamic_deque->back++;
+	dsa_dynamic_array_insert(dynamic_deque->dynamic_array, 0, value);
 }
 
 int dsa_dynamic_deque_remove_front(dsa_dynamic_deque *dynamic_deque) {
-	if (dsa_dynamic_deque_is_empty(dynamic_deque)) return -1;
-
 	int value = dsa_dynamic_array_remove(dynamic_deque->dynamic_array, 0);
 	dynamic_deque->back--;
 	return value;
 }
 
 void dsa_dynamic_deque_insert_back(dsa_dynamic_deque *dynamic_deque, const int value) {
-	if (dsa_dynamic_deque_is_full(dynamic_deque)) {
-		dsa_dynamic_array_resize(dynamic_deque->dynamic_array, 2);
-	}
-
-	dsa_dynamic_array_insert(dynamic_deque->dynamic_array, dynamic_deque->back, value);
 	dynamic_deque->back++;
+	dsa_dynamic_array_insert(dynamic_deque->dynamic_array, dynamic_deque->back, value);
 }
 
 int dsa_dynamic_deque_remove_back(dsa_dynamic_deque *dynamic_deque) {
-	if ((dynamic_deque->dynamic_array->capacity / dynamic_deque->dynamic_array->size) == 2) {
-		dsa_dynamic_array_resize(dynamic_deque->dynamic_array, 0.5);
-	}
-
 	int value = dsa_dynamic_array_remove(dynamic_deque->dynamic_array, dynamic_deque->back);
 	dynamic_deque->back--;
 	return value;

@@ -30,6 +30,12 @@ void dsa_dynamic_array_destroy(dsa_dynamic_array *dynamic_array) {
 }
 
 void dsa_dynamic_array_insert(dsa_dynamic_array *dynamic_array, int index, const int value) {
+    if (index < 0) return;
+
+	if (index > dynamic_array->size) {
+		dsa_dynamic_array_resize(dynamic_array, 2);
+	}
+
 	if (dsa_dynamic_array_is_full(dynamic_array)) {
 		dsa_dynamic_array_resize(dynamic_array, 2);
 	}
@@ -72,8 +78,14 @@ bool dsa_dynamic_array_is_empty(dsa_dynamic_array *dynamic_array) {
 }
 
 void dsa_dynamic_array_resize(dsa_dynamic_array *dynamic_array, float new_capacity) {
+	int *array = (int *) realloc(dynamic_array->array, sizeof(int) * new_capacity);
+	if (!array) {
+		perror("Failed to resize dynamic array");
+		exit(EXIT_FAILURE);
+	}
+
 	dynamic_array->capacity *= new_capacity;
-	dynamic_array->array = (int *) realloc(dynamic_array->array, sizeof(int) * dynamic_array->capacity);
+	dynamic_array->array = array;
 }
 
 void dsa_dynamic_array_shift_elements(dsa_dynamic_array *dynamic_array, int index, int direction) {

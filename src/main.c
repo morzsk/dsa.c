@@ -179,6 +179,9 @@ int main() {
                             dequeActive = false;
                             break;
 
+						case 11:
+							dsa_dynamic_array_resize(dd->dynamic_array, 2);
+
                         default:
                             printf("Invalid choice. Please try again.\n");
                     }
