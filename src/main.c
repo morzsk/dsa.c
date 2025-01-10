@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+
 #include "dynamic_array.h"
 #include "dynamic_deque.h"
+#include "singly_linked_list.h"
 
 int main() {
     dsa_dynamic_array *da = dsa_dynamic_array_create(10);
     dsa_dynamic_deque *dd = dsa_dynamic_deque_create(10);
+    dsa_singly_linked_list *sll = dsa_singly_linked_list_create();
 
     bool active = true;
     int choice, index, value;
@@ -15,7 +18,8 @@ int main() {
         printf("\n=== Main Menu ===\n");
         printf("1. Dynamic Array Operations\n");
         printf("2. Dynamic Deque Operations\n");
-        printf("3. Exit\n");
+        printf("3. Singly Linked List Operations\n");
+        printf("4. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -179,8 +183,88 @@ int main() {
                             dequeActive = false;
                             break;
 
-						case 11:
-							dsa_dynamic_array_resize(dd->dynamic_array, 2);
+                        default:
+                            printf("Invalid choice. Please try again.\n");
+                    }
+                }
+                break;
+            }
+
+            case 3: {
+                bool listActive = true;
+                while (listActive) {
+                    printf("\n=== Singly Linked List Menu ===\n");
+                    printf("1. Print Singly Linked List\n");
+                    printf("2. Insert at Head\n");
+                    printf("3. Remove from Head\n");
+                    printf("4. Insert at Tail\n");
+                    printf("5. Remove from Tail\n");
+                    printf("6. Insert at Position\n");
+                    printf("7. Remove from Position\n");
+                    printf("8. Peek Head\n");
+                    printf("9. Peek Tail\n");
+                    printf("10. Back to Main Menu\n");
+                    printf("Enter your choice: ");
+                    scanf("%d", &choice);
+
+                    switch (choice) {
+                        case 1:
+                            dsa_singly_linked_list_print(sll);
+                            break;
+
+                        case 2:
+                            printf("Enter value to insert at head: ");
+                            scanf("%d", &value);
+                            dsa_singly_linked_list_insert_head(sll, value);
+                            printf("Value %d inserted at head.\n", value);
+                            break;
+
+                        case 3:
+                            value = dsa_singly_linked_list_remove_head(sll);
+                            printf("Removed value from head: %d\n", value);
+                            break;
+
+                        case 4:
+                            printf("Enter value to insert at tail: "); 
+                            scanf("%d", &value);
+                            dsa_singly_linked_list_insert_tail(sll, value);
+                            printf("Value %d inserted at tail.\n", value);
+                            break;
+
+                        case 5:
+                            value = dsa_singly_linked_list_remove_tail(sll);
+                            printf("Removed value from tail: %d\n", value);
+                            break;
+
+                        case 6:
+                            printf("Enter position to insert at: ");
+                            scanf("%d", &index);
+                            printf("Enter value to insert: ");
+                            scanf("%d", &value);
+                            dsa_singly_linked_list_insert(sll, index, value);
+                            printf("Value %d inserted at position %d.\n", value, index);
+                            break;
+
+                        case 7:
+                            printf("Enter position to remove from: ");
+                            scanf("%d", &index);
+                            value = dsa_singly_linked_list_remove(sll, index);
+                            printf("Removed value from position %d: %d\n", index, value);
+                            break;
+
+                        case 8:
+                            value = dsa_singly_linked_list_peek_head(sll);
+                            printf("Head value: %d\n", value);
+                            break;
+
+                        case 9:
+                            value = dsa_singly_linked_list_peek_tail(sll);
+                            printf("Tail value: %d\n", value);
+                            break;
+
+                        case 10:
+                            listActive = false;
+                            break;
 
                         default:
                             printf("Invalid choice. Please try again.\n");
@@ -189,7 +273,7 @@ int main() {
                 break;
             }
 
-            case 3:
+            case 4:
                 active = false;
                 printf("Exiting program.\n");
                 break;
@@ -201,5 +285,6 @@ int main() {
 
     dsa_dynamic_array_destroy(da);
     dsa_dynamic_deque_destroy(dd);
+    dsa_singly_linked_list_destroy(sll);
     return EXIT_SUCCESS;
 }
