@@ -4,25 +4,27 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "singly_linked_list.h"
+
 typedef struct {
 	char *key;
-	char *value;
+	void *value;
 } dsa_ht_entry;
 
 typedef struct {
-	dsa_ht_entry **buckets;
+	dsa_singly_linked_list **buckets;
 	size_t size;
 	size_t count;
 } dsa_hash_table;
 
-dsa_ht_entry *dsa_ht_entry_create(char *key, char *value);
+dsa_ht_entry *dsa_ht_entry_create(char *key, void *value);
 void dsa_ht_entry_destroy(dsa_ht_entry *entry);
 dsa_ht_entry *dsa_hash_table_next(dsa_hash_table *hash_table, size_t *index);
 
 dsa_hash_table *dsa_hash_table_create(size_t initial_capacity);
 void dsa_hash_table_destroy(dsa_hash_table *hash_table);
 
-void dsa_hash_table_insert(dsa_hash_table *hash_table, char *key, char *value);
+void dsa_hash_table_insert(dsa_hash_table *hash_table, char *key, void *value);
 char *dsa_hash_table_get(dsa_hash_table *hash_table, char *key);
 void dsa_hash_table_remove(dsa_hash_table *hash_table, char *key);
 
@@ -30,7 +32,7 @@ bool dsa_hash_table_is_full(dsa_hash_table *hash_table);
 bool dsa_hash_table_is_empty(dsa_hash_table *hash_table);
 bool dsa_hash_table_probe(dsa_hash_table *hash_table, char *key, size_t *out_index); 
 
-void dsa_hash_table_print(dsa_hash_table *hash_table); 
+void dsa_hash_table_print(dsa_hash_table *hash_table, const char *type); 
 double dsa_hash_table_load_factor(dsa_hash_table *hash_table);
 
 #endif // !DSA_HASH_TABLE_H

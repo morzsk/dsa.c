@@ -4,14 +4,14 @@
 
 #include "singly_linked_list.h"
 
-dsa_sll_node *dsa_sll_node_create(int value, dsa_sll_node *next) {
+dsa_sll_node *dsa_sll_node_create(const void *value, dsa_sll_node *next) {
     dsa_sll_node *node = (dsa_sll_node *) malloc(sizeof(dsa_sll_node));
     if (!node) {
         fprintf(stderr, "Failed to allocate memory for a new node\n");
         return NULL;
     }
 
-    node->value = value;
+    node->value = (void *) value;
     node->next = next;
     return node;
 }
@@ -58,7 +58,8 @@ void dsa_singly_linked_list_destroy(dsa_singly_linked_list *singly_linked_list) 
     free(singly_linked_list);
     singly_linked_list = NULL;
 }
-void dsa_singly_linked_list_insert_head(dsa_singly_linked_list *singly_linked_list, int value) {
+
+void dsa_singly_linked_list_insert_head(dsa_singly_linked_list *singly_linked_list, const void *value) {
     dsa_sll_node *new_node = dsa_sll_node_create(value, singly_linked_list->head);
     if (!new_node) {
         fprintf(stderr, "Failed to create a new node\n");
@@ -71,14 +72,14 @@ void dsa_singly_linked_list_insert_head(dsa_singly_linked_list *singly_linked_li
     }
 }
 
-int dsa_singly_linked_list_remove_head(dsa_singly_linked_list *singly_linked_list) {
+void *dsa_singly_linked_list_remove_head(dsa_singly_linked_list *singly_linked_list) {
     if (singly_linked_list->head == NULL) {
         fprintf(stderr, "List is empty\n");
-        return -1; // Indicate failure
+        exit(EXIT_FAILURE);
     }
 
     dsa_sll_node *old_head = singly_linked_list->head;
-    int value = old_head->value;
+    void *value = old_head->value;
 
     singly_linked_list->head = old_head->next;
     if (singly_linked_list->head == NULL) {
@@ -89,7 +90,7 @@ int dsa_singly_linked_list_remove_head(dsa_singly_linked_list *singly_linked_lis
     return value;
 }
 
-void dsa_singly_linked_list_insert_tail(dsa_singly_linked_list *singly_linked_list, int value) {
+void dsa_singly_linked_list_insert_tail(dsa_singly_linked_list *singly_linked_list, const void *value) {
     dsa_sll_node *new_node = dsa_sll_node_create(value, NULL);
     if (!new_node) {
         fprintf(stderr, "Failed to create a new node\n");
@@ -106,10 +107,10 @@ void dsa_singly_linked_list_insert_tail(dsa_singly_linked_list *singly_linked_li
     }
 }
 
-int dsa_singly_linked_list_remove_tail(dsa_singly_linked_list *singly_linked_list) {
+void *dsa_singly_linked_list_remove_tail(dsa_singly_linked_list *singly_linked_list) {
     if (singly_linked_list->head == NULL) {
         fprintf(stderr, "List is empty\n");
-        return -1; // Indicate failure
+        exit(EXIT_FAILURE);
     }
 
     dsa_sll_node *current = singly_linked_list->head;
@@ -120,7 +121,7 @@ int dsa_singly_linked_list_remove_tail(dsa_singly_linked_list *singly_linked_lis
         current = current->next;
     }
 
-    int value = current->value;
+    void *value = current->value;
 
     if (previous) {
         previous->next = NULL;
@@ -134,33 +135,29 @@ int dsa_singly_linked_list_remove_tail(dsa_singly_linked_list *singly_linked_lis
     return value;
 }
 
-void dsa_singly_linked_list_insert(dsa_singly_linked_list *singly_linked_list, int index, int value) {
+void dsa_singly_linked_list_insert(dsa_singly_linked_list *singly_linked_list, size_t index, const void *value) {
     if (index < 0) {
-        fprintf(stderr, "Invalid index: %d\n", index);
+        fprintf(stderr, "Invalid index: %d\n", (int) index);
         return;
     }
 
-    // Inserting at the head
     if (index == 0) {
         dsa_singly_linked_list_insert_head(singly_linked_list, value);
         return;
     }
 
     dsa_sll_node *current = singly_linked_list->head;
-    int current_index = 0;
-
-    // Traverse to the node before the target index
+    size_t current_index = 0;
     while (current && current_index < index - 1) {
         current = current->next;
         current_index++;
     }
 
     if (!current) {
-        fprintf(stderr, "Index %d is out of bounds\n", index);
+        fprintf(stderr, "Index %d is out of bounds\n", (int) index);
         return;
     }
 
-    // Create a new node and insert it
     dsa_sll_node *new_node = dsa_sll_node_create(value, current->next);
     if (!new_node) {
         fprintf(stderr, "Failed to allocate memory for a new node\n");
@@ -168,44 +165,37 @@ void dsa_singly_linked_list_insert(dsa_singly_linked_list *singly_linked_list, i
     }
 
     current->next = new_node;
-
-    // Update tail if inserted at the end
     if (!new_node->next) {
         singly_linked_list->tail = new_node;
     }
 }
 
-int dsa_singly_linked_list_remove(dsa_singly_linked_list *singly_linked_list, int index) {
+void *dsa_singly_linked_list_remove(dsa_singly_linked_list *singly_linked_list, size_t index) {
     if (index < 0) {
-        fprintf(stderr, "Invalid index: %d\n", index);
-        return -1; // Indicate failure
-    }
+        fprintf(stderr, "Invalid index: %d\n", (int) index);
+    	exit(EXIT_FAILURE);
+	}
 
-    // Removing from the head
     if (index == 0) {
         return dsa_singly_linked_list_remove_head(singly_linked_list);
     }
 
     dsa_sll_node *current = singly_linked_list->head;
-    int current_index = 0;
-
-    // Traverse to the node before the target index
+	size_t current_index = 0;
     while (current && current_index < index - 1) {
         current = current->next;
         current_index++;
     }
 
     if (!current || !current->next) {
-        fprintf(stderr, "Index %d is out of bounds\n", index);
-        return -1; // Indicate failure
-    }
+        fprintf(stderr, "Index %d is out of bounds\n", (int) index);
+    	exit(EXIT_FAILURE);
+	}
 
-    // Remove the node
     dsa_sll_node *node_to_remove = current->next;
-    int value = node_to_remove->value;
+    void *value = node_to_remove->value;
     current->next = node_to_remove->next;
 
-    // Update tail if removed the last node
     if (!current->next) {
         singly_linked_list->tail = current;
     }
@@ -214,29 +204,62 @@ int dsa_singly_linked_list_remove(dsa_singly_linked_list *singly_linked_list, in
     return value;
 }
 
-void dsa_singly_linked_list_print(dsa_singly_linked_list *singly_linked_list) {
+void dsa_singly_linked_list_print(dsa_singly_linked_list *singly_linked_list, const char *type) {
     dsa_sll_node *current = singly_linked_list->head;
 
     printf("Singly Linked List: ");
     while (current) {
-        printf("%d -> ", current->value);
+        void *element = current->value;
+
+        if (strcmp(type, "int") == 0) {
+            printf("%d", *(int *)element);
+        } else if (strcmp(type, "float") == 0) {
+            printf("%f", *(float *)element);
+        } else if (strcmp(type, "double") == 0) {
+            printf("%lf", *(double *)element);
+        } else if (strcmp(type, "char") == 0) {
+            printf("'%c'", *(char *)element);
+        } else if (strcmp(type, "string") == 0) {
+            printf("\"%s\"", (char *) element);
+        } else if (strcmp(type, "short") == 0) {
+            printf("%d", *(short *)element);
+        } else if (strcmp(type, "long") == 0) {
+            printf("%ld", *(long *)element);
+        } else if (strcmp(type, "long long") == 0) {
+            printf("%lld", *(long long *)element);
+        } else if (strcmp(type, "unsigned int") == 0) {
+            printf("%u", *(unsigned int *)element);
+        } else if (strcmp(type, "bool") == 0) {
+            printf("%s", *(int *)element ? "true" : "false");
+        } else if (strcmp(type, "size_t") == 0) {
+            printf("%zu", *(size_t *)element);
+        } else {
+            printf("?");
+        }
+
         current = current->next;
+
+        if (current) {
+            printf(" -> ");
+        }
     }
-    printf("NULL\n");
+    printf(" -> NULL\n");
 }
 
-int dsa_singly_linked_list_peek_head(dsa_singly_linked_list *singly_linked_list) {
+void *dsa_singly_linked_list_peek_head(dsa_singly_linked_list *singly_linked_list) {
     if (singly_linked_list->head == NULL) {
         fprintf(stderr, "List is empty\n");
-        return -1; // Indicate failure
+        exit(EXIT_FAILURE);
     }
+
     return singly_linked_list->head->value;
 }
 
-int dsa_singly_linked_list_peek_tail(dsa_singly_linked_list *singly_linked_list) {
+void *dsa_singly_linked_list_peek_tail(dsa_singly_linked_list *singly_linked_list) {
     if (singly_linked_list->tail == NULL) {
         fprintf(stderr, "List is empty\n");
-        return -1; // Indicate failure
+        exit(EXIT_FAILURE);
     }
+
     return singly_linked_list->tail->value;
 }

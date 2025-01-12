@@ -5,7 +5,7 @@
 #include "hash_table.h"
 #include "hash.h"
 
-dsa_ht_entry *dsa_ht_entry_create(char *key, char *value) {
+dsa_ht_entry *dsa_ht_entry_create(char *key, void *value) {
 	dsa_ht_entry *entry = (dsa_ht_entry *) malloc(sizeof(dsa_ht_entry));
 	if (entry == NULL) {
 		fprintf(stderr, "Failed to allocate memory for a new entry\n");
@@ -46,7 +46,7 @@ dsa_hash_table *dsa_hash_table_create(size_t initial_capacity) {
 		return NULL;
 	}
 
-	dsa_ht_entry **buckets = (dsa_ht_entry **) calloc(initial_capacity, sizeof(dsa_ht_entry *));
+	dsa_singly_linked_list **buckets = (dsa_singly_linked_list **) malloc(sizeof(dsa_singly_linked_list *) * initial_capacity);
 	if (buckets == NULL) {
 		fprintf(stderr, "Failed to allocate memory for a bucket\n");
 		return NULL;
@@ -78,7 +78,7 @@ void dsa_hash_table_destroy(dsa_hash_table *hash_table) {
     hash_table = NULL;
 }
 
-void dsa_hash_table_insert(dsa_hash_table *hash_table, char *key, char *value) {
+void dsa_hash_table_insert(dsa_hash_table *hash_table, char *key, void *value) {
 	if (!hash_table || !key || !value) {
         fprintf(stderr, "Invalid hash table or key or value\n");
         return;
@@ -86,7 +86,25 @@ void dsa_hash_table_insert(dsa_hash_table *hash_table, char *key, char *value) {
 
 	size_t index = dsa_djb2_hash(key, hash_table->size);
 	
-	hash_table->buckets[index] = dsa_ht_entry_create(strdup(key), strdup(value));
+    dsa_singly_linked_list *bucket = hash_table->buckets[index];
+    if (!bucket) {
+        hash_table->buckets[index] = dsa_singly_linked_list_create();
+        bucket = hash_table->buckets[index];
+    }
+
+    dsa_sll_node *current = bucket->head;
+    while (current) {
+        dsa_ht_entry *entry = (dsa_ht_entry *)current->value;
+        if (strcmp(entry->key, key) == 0) {
+            free(entry->value);
+            entry->value = strdup(value);
+            return;
+        }
+        current = current->next;
+    }
+
+    dsa_ht_entry *new_entry = dsa_ht_entry_create(strdup(key), strdup(value));
+    dsa_singly_linked_list_insert_head(bucket, new_entry);
     hash_table->count++;
 }
 
@@ -97,18 +115,23 @@ char *dsa_hash_table_get(dsa_hash_table *hash_table, char *key) {
     }
 
     size_t index = dsa_djb2_hash(key, hash_table->size);
-    dsa_ht_entry *entry = hash_table->buckets[index];
-    if (!entry) {
-        fprintf(stderr, "Key '%s' not found in hash table\n", key);
+    dsa_singly_linked_list *bucket = hash_table->buckets[index];
+    if (!bucket) {
+        fprintf(stderr, "Error: Key '%s' not found in hash table (bucket is empty).\n", key);
         return NULL;
     }
 
-    if (strcmp(entry->key, key) == 0) {
-        return entry->value;
-    } else {
-        fprintf(stderr, "Key '%s' not found at expected location\n", key);
-        return NULL;
+    dsa_sll_node *current = bucket->head;
+    while (current) {
+        dsa_ht_entry *entry = (dsa_ht_entry *)current->value;
+        if (strcmp(entry->key, key) == 0) {
+            return entry->value;
+        }
+        current = current->next;
     }
+
+    fprintf(stderr, "Error: Key '%s' not found in hash table.\n", key);
+    return NULL;
 }	
 
 void dsa_hash_table_remove(dsa_hash_table *hash_table, char *key) {
@@ -118,21 +141,41 @@ void dsa_hash_table_remove(dsa_hash_table *hash_table, char *key) {
     }
 
     size_t index = dsa_djb2_hash(key, hash_table->size);
-    dsa_ht_entry *entry = hash_table->buckets[index];
-    if (!entry) {
-        fprintf(stderr, "Key '%s' not found in hash table\n", key);
+    dsa_singly_linked_list *bucket = hash_table->buckets[index];
+    if (!bucket) {
+        fprintf(stderr, "Error: Key '%s' not found in hash table (bucket is empty).\n", key);
         return;
     }
 
-	if (strcmp(entry->key, key) == 0) {
-        dsa_ht_entry_destroy(entry);
-        hash_table->buckets[index] = NULL;
-        hash_table->count--;
+    // Traverse the linked list to find and remove the key
+    dsa_sll_node *prev = NULL;
+    dsa_sll_node *current = bucket->head;
 
-        printf("Key '%s' removed from hash table\n", key);
-    } else {
-        fprintf(stderr, "Key '%s' not found at expected location\n", key);
+    while (current) {
+        dsa_ht_entry *entry = (dsa_ht_entry *)current->value;
+        if (strcmp(entry->key, key) == 0) {
+            // Remove the node
+            if (prev) {
+                prev->next = current->next;
+            } else {
+                bucket->head = current->next;
+            }
+            if (current == bucket->tail) {
+                bucket->tail = prev;
+            }
+
+            dsa_ht_entry_destroy(entry);
+            free(current);
+            hash_table->count--;
+
+            printf("Key '%s' removed from hash table.\n", key);
+            return;
+        }
+        prev = current;
+        current = current->next;
     }
+
+    fprintf(stderr, "Error: Key '%s' not found in hash table.\n", key);
 }
 
 bool dsa_hash_table_is_full(dsa_hash_table *hash_table) {
@@ -154,7 +197,7 @@ bool dsa_hash_table_is_empty(dsa_hash_table *hash_table) {
     return hash_table->count == 0;
 }
 
-void dsa_hash_table_print(dsa_hash_table *hash_table) {
+void dsa_hash_table_print(dsa_hash_table *hash_table, const char* type) {
     if (!hash_table) {
         fprintf(stderr, "Invalid hash table\n");
         return;
@@ -162,14 +205,57 @@ void dsa_hash_table_print(dsa_hash_table *hash_table) {
 
     printf("Hash Table:\n");
     for (size_t i = 0; i < hash_table->size; i++) {
-        dsa_ht_entry *entry = hash_table->buckets[i];
-        if (entry) {
-            printf("Bucket %zu: Key = %s, Value = %s\n", i, entry->key, entry->value);
+        dsa_singly_linked_list *bucket = hash_table->buckets[i];
+
+        printf("%zu: ", i);
+
+        if (bucket && bucket->head) {
+            dsa_sll_node *current = bucket->head;
+            while (current) {
+                dsa_ht_entry *entry = (dsa_ht_entry *)current->value;
+                printf("{ \"%s\": ", entry->key);
+
+                // Print value based on type
+                if (strcmp(type, "int") == 0) {
+                    printf("%d", *(int *)entry->value);
+                } else if (strcmp(type, "float") == 0) {
+                    printf("%f", *(float *)entry->value);
+                } else if (strcmp(type, "double") == 0) {
+                    printf("%lf", *(double *)entry->value);
+                } else if (strcmp(type, "char") == 0) {
+                    printf("'%c'", *(char *)entry->value);
+                } else if (strcmp(type, "string") == 0) {
+                    printf("\"%s\"", (char *)entry->value);
+                } else if (strcmp(type, "short") == 0) {
+                    printf("%d", *(short *)entry->value);
+                } else if (strcmp(type, "long") == 0) {
+                    printf("%ld", *(long *)entry->value);
+                } else if (strcmp(type, "long long") == 0) {
+                    printf("%lld", *(long long *)entry->value);
+                } else if (strcmp(type, "unsigned int") == 0) {
+                    printf("%u", *(unsigned int *)entry->value);
+                } else if (strcmp(type, "bool") == 0) {
+                    printf("%s", *(int *)entry->value ? "true" : "false");
+                } else if (strcmp(type, "size_t") == 0) {
+                    printf("%zu", *(size_t *)entry->value);
+                } else {
+                    printf("?");
+                }
+
+                printf(" }");
+
+                current = current->next;
+                if (current) {
+                    printf(" -> ");
+                }
+            }
         } else {
-            printf("Bucket %zu: (empty)\n", i);
+            printf("∅");
         }
+
+        printf("\n");
     }
-} 
+}
 
 double dsa_hash_table_load_factor(dsa_hash_table *hash_table) {
 	return (double) hash_table->count / hash_table->size;
